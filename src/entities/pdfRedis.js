@@ -1,37 +1,32 @@
-const oracledb = require('oracledb');
-const { conectarBanco } = require('../config/db.js'); // conexão com o banco
+const fetch = require('node-fetch'); // Certifique-se de que 'node-fetch' está instalado
 
-async function getCountRegistros(departamento, secao, produto, codfornec, codmarca) {
-  const sql = `select COUNT(*) as TOTAL
-  from pcest, pcprodut, pcdepto, pcsecao, pctabpr
-  where pcest.codprod = pcprodut.codprod
-  AND pcprodut.codepto = pcdepto.codepto
-  and pcprodut.codsec = pcsecao.codsec
-  and pctabpr.codprod = pcprodut.codprod
-  and ((pcdepto.codepto)= :DEPARTAMENTO OR :DEPARTAMENTO IS NULL)
-  AND (pcsecao.codsec = :SECAO OR :SECAO IS NULL)
-  AND (PCPRODUT.CODPROD = :PRODUTO OR :PRODUTO IS NULL)
-  AND (PCPRODUT.CODFORNEC = :CODFORNEC OR :CODFORNEC IS NULL)
-  AND (PCPRODUT.CODMARCA = :CODMARCA OR :CODMARCA IS NULL)
-  AND PCPRODUT.codepto NOT IN (901,400,900)
-  AND PCPRODUT.codprod NOT IN (72992)
-  AND DECODE(((PCEST.QTESTGER - PCEST.QTBLOQUEADA) - PCEST.QTRESERV), '0', 'N', 'S') = 'S'
-  AND ((PCEST.QTESTGER - PCEST.QTBLOQUEADA) - PCEST.QTRESERV) IS NOT NULL
-  and pcest.codfilial = 1`;
+async function getCountRegistros() {
+  try {
+    const URL = process.env.URL_API;
+    const response = await fetch(URL);
 
-  const connection = await conectarBanco();
+    // Se a resposta não for bem-sucedida, lançar um erro
+    if (!response.ok) {
+      throw new Error(`Resposta inválida da API: ${response.status}`);
+    }
 
-  const binds = {
-    DEPARTAMENTO: departamento || null,
-    SECAO: secao || null,
-    PRODUTO: produto || null,
-    CODFORNEC: codfornec || null,
-    CODMARCA: codmarca || null
-  };
+    // Extrair o corpo da resposta como JSON
+    const data = await response.json();
 
-  const result = await connection.execute(sql, binds, { outFormat: oracledb.OUT_FORMAT_OBJECT });
+    console.log('[DEBUG] Resposta da API externa:', data);
 
-  return result.rows[0].TOTAL;
+    // Agora assumimos que o JSON contém diretamente o valor do "count"
+    const count = data; // A resposta contém o número diretamente
+
+    if (count === undefined) {
+      throw new Error('Resposta da API não contém dados válidos de "count"');
+    }
+
+    return count;
+  } catch (error) {
+    console.error('[ERRO] Falha ao buscar count da API externa:', error.message);
+    throw error;
+  }
 }
 
 module.exports = { getCountRegistros };

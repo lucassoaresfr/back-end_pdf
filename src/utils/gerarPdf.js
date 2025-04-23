@@ -1,17 +1,19 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 require('dotenv').config();
 
 async function gerarPdfPuppeteer() {
     const browser = await puppeteer.launch({
-        headless: true, // No modo headless
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium',
         args: [
-            '--no-sandbox',    // Desabilita o sandbox, necessário para rodar no Docker
-            '--disable-setuid-sandbox',  // Desabilita o setuid, que pode gerar erros
-            '--disable-dev-shm-usage',  // Para reduzir problemas de memória em contêineres
-            '--remote-debugging-port=9222' // Caso precise de depuração remota
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage', 
+          '--disable-gpu'            
         ],
-        executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium-browser' // Caminho do Chromium (pode variar dependendo da instalação)
-    });
+        headless: 'new'             
+      });
+    
+
     console.log('Navegador iniciado com sucesso.');
 
     const page = await browser.newPage();
@@ -31,6 +33,12 @@ async function gerarPdfPuppeteer() {
 
 
     await page.waitForSelector('#div_table', { visible: true });
+    await page.waitForFunction(() => {
+        const img = document.querySelector('img');
+        return img && img.complete && img.naturalHeight !== 0;
+    });
+
+    console.log('Imagem carregada com sucesso.');    
 
     const pdfBuffer = await page.pdf({ format: 'A4' });
 

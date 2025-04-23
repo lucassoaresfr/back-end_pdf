@@ -9,10 +9,11 @@ async function gerarPdfSeCountMudar() {
   try {
     const countAtual = await getCountRegistros();
 
-    const [pdfBase64, countSalvoStr] = await Promise.all([
-      client.get(PDF_CACHE_KEY),
-      client.get(COUNT_CACHE_KEY)
-    ]);
+    // Usando pipeline para buscar as chaves de uma vez
+    const pipeline = client.pipeline();
+    pipeline.get(PDF_CACHE_KEY);
+    pipeline.get(COUNT_CACHE_KEY);
+    const [pdfBase64, countSalvoStr] = await pipeline.exec();
 
     const countSalvo = countSalvoStr !== null ? Number(countSalvoStr) : null;
 
