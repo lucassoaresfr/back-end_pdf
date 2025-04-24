@@ -29,7 +29,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/lucasti/back-end_pdf
+          images: ghcr.io/lucassoaresfr/back-end_pdf
 
       - name: Extract version from package.json
         uses: sergeysova/jq-action@v2
@@ -43,5 +43,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/lucasti/back-end_pdf:${{ steps.version.outputs.value }}
-            ghcr.io/lucasti/back-end_pdf:latest
+            ghcr.io/lucassoaresfr/back-end_pdf:${{ steps.version.outputs.value }}
+            ghcr.io/lucassoaresfr/back-end_pdf:latest
