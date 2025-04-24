@@ -1,0 +1,44 @@
+name: Publish Docker image
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+      #
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - run: npm install
+      - run: GITHUB_TOKEN=${{secrets.GH_TOKEN}} npm run release
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: back-pdf/lucasti/back-end_pdf
+      - name: Extract version from package.json
+        uses: sergeysova/jq-action@v2
+        id: version
+        with:
+          cmd: 'jq .version package.json -r'
+      - name: Build and push Docker image
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: .
+          push: true
+          tags: |
+            back-pdf/lucasti/back-end_pdf:${{ steps.version.outputs.value }}
+            back-pdf/lucasti/back-end_pdf:latest
