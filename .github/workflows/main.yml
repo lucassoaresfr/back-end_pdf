@@ -24,7 +24,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - run: npm install
-      - run: GITHUB_TOKEN=${{ secrets.GH_TOKEN }} npm run release
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
