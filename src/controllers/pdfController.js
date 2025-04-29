@@ -1,21 +1,4 @@
 const { gerarPdfSeCountMudar, recuperarPdfCache } = require('../services/pdfCacheService.js');
-/*const pdfParse = require('pdf-parse');*/
-
-/*async function validarPdf(pdfBuffer) {
-    try {
-        const data = await pdfParse(pdfBuffer);
-        if (data && data.numpages > 0) {
-            console.log('PDF é válido e tem páginas.');
-            return true;
-        } else {
-            console.error('PDF é inválido (sem páginas).');
-            return false;
-        }
-    } catch (error) {
-        console.error('Falha ao validar o PDF:', error);
-        return false;
-    }
-}*/
 
 async function gerarPdf(req, res) {
   try {
@@ -30,7 +13,6 @@ async function gerarPdf(req, res) {
       }).send(novoPdfBuffer);
     }
 
-    // 🧠 Se não precisou gerar, pega o que está no cache
     const pdfCache = await recuperarPdfCache();
 
     if (pdfCache) {
