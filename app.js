@@ -15,7 +15,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type'],
 }));
 
-app.use('/pdf.pdf', pdfRoutes);
+app.use('/pdf', pdfRoutes);
 
 app.listen(port, () => {
   console.log(`Servidor iniciado na porta ${port}.`);
