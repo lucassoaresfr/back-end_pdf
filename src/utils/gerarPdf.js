@@ -12,6 +12,13 @@ async function gerarPdfPuppeteer() {
         ],
         headless: 'new'             
       });
+      
+      /*const browser = await puppeteer.launch({
+        executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+        headless: 'new',
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+      */
     
 
     console.log('Navegador iniciado com sucesso.');
