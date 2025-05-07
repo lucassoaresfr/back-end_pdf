@@ -6,7 +6,7 @@ const pdfRoutes = require('./src/routes/pdfRouter.js');
 const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3041;
 
 app.use(express.json());
 app.use(cors({
