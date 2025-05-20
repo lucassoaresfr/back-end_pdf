@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer-core');
 require('dotenv').config();
 
 async function gerarPdfPuppeteer() {
-    const browser = await puppeteer.launch({
+    /*const browser = await puppeteer.launch({
         executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium',
         args: [
           '--no-sandbox',
@@ -12,13 +12,13 @@ async function gerarPdfPuppeteer() {
         ],
         headless: 'new'             
       });
-      
-      /*const browser = await puppeteer.launch({
+      */
+      const browser = await puppeteer.launch({
         executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
         headless: 'new',
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
       });
-      */
+      
     
 
     console.log('Navegador iniciado com sucesso.');
