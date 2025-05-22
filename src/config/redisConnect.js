@@ -2,8 +2,8 @@ const Redis = require('ioredis');  // Importando a biblioteca ioredis
 
 // Criando a instância do cliente Redis
 const client = new Redis({
-  host: process.env.REDIS_HOST || 'redis-container',   // Endereço do Redis
-  port: process.env.REDIS_PORT || 6380,           // Porta do Redis
+  host: process.env.REDIS_HOST || 'redis-pdf',   // Endereço do Redis
+  port: process.env.REDIS_PORT || 6379,           // Porta do Redis
 });
 
 // Tratando erro de conexão

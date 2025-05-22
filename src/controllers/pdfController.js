@@ -54,7 +54,7 @@ async function gerarPdf(req, res) {
     if (novoPdfBuffer) {
       return res.set({
         'Content-Type': 'application/pdf',
-        'Content-Disposition': 'inline; filename=relatorio.pdf',
+        'Content-Disposition': 'inline; filename=tabela-produtos.pdf',
       }).send(novoPdfBuffer);
     }
 
@@ -64,7 +64,7 @@ async function gerarPdf(req, res) {
     if (pdfCache) {
       return res.set({
         'Content-Type': 'application/pdf',
-        'Content-Disposition': 'inline; filename=relatorio.pdf',
+        'Content-Disposition': 'inline; filename=tabela-produtos.pdf',
       }).send(pdfCache);
     }
 
